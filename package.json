@@ -1,0 +1,36 @@
+{
+  "name": "webfileexplorer",
+  "description": "",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "lint": "eslint",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.0",
+    "ejs": "^3.1.8",
+    "express": "^4.18.1",
+    "express-fileupload": "^1.4.0",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "eslint": "^8.20.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "nodemon": "^2.0.19",
+    "supertest": "^6.2.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JiaweiHe98/WebFileExplorer.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/JiaweiHe98/WebFileExplorer/issues"
+  },
+  "homepage": "https://github.com/JiaweiHe98/WebFileExplorer#readme"
+}
