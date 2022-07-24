@@ -189,6 +189,10 @@ const deleteFileOrDir = async (dir, name) => {
 };
 
 module.exports = {
+  checkExistance,
+  readDir,
+  formatMtime,
+  formatFileSize,
   getDirInfo,
   createNewFolder,
   rename,
