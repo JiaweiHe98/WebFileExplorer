@@ -43,7 +43,7 @@ const formatMtime = (stat) => {
 
   const date = stat.mtime
     .toLocaleDateString('en-US', optionsDate)
-    .replace(',', ' ');
+    .replace(',', '');
   const time = stat.mtime.toLocaleTimeString('en-US', optionsTime);
   const year = stat.mtime.getFullYear();
   return `${date} ${time} ${year}`;
@@ -144,11 +144,21 @@ const createNewFolder = async (dir, name) => {
  */
 const rename = async (dir, name, newName) => {
   const fullPathOld = path.join(dir, name);
+  const fullPathNew = path.join(dir, newName);
+
   if (!(await checkExistance(fullPathOld))) {
     return { renamed: false, message: 'Do not exist' };
   }
 
-  const fullPathNew = path.join(dir, newName);
+  if (await checkExistance(fullPathNew)) {
+    const statOld = await fs.promises.stat(fullPathOld);
+    const statNew = await fs.promises.stat(fullPathNew);
+
+    if (statOld.isDirectory === statNew.isDirectory()) {
+      return { renamed: false, message: 'New name already exist' };
+    }
+  }
+
   try {
     await fs.promises.rename(fullPathOld, fullPathNew);
     return { renamed: true, message: 'OK' };
