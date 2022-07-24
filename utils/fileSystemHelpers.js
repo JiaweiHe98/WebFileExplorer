@@ -144,19 +144,13 @@ const createNewFolder = async (dir, name) => {
  */
 const rename = async (dir, name, newName) => {
   const fullPathOld = path.join(dir, name);
-  const fullPathNew = path.join(dir, newName);
-
   if (!(await checkExistance(fullPathOld))) {
     return { renamed: false, message: 'Do not exist' };
   }
 
+  const fullPathNew = path.join(dir, newName);
   if (await checkExistance(fullPathNew)) {
-    const statOld = await fs.promises.stat(fullPathOld);
-    const statNew = await fs.promises.stat(fullPathNew);
-
-    if (statOld.isDirectory === statNew.isDirectory()) {
-      return { renamed: false, message: 'New name already exist' };
-    }
+    return { renamed: false, message: 'New name already exist' };
   }
 
   try {
