@@ -6,7 +6,8 @@
   "scripts": {
     "start": "nodemon server.js",
     "lint": "eslint",
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "lintfix": "npx eslint . --fix"
   },
   "dependencies": {
     "body-parser": "^1.20.0",
@@ -16,6 +17,7 @@
     "path": "^0.12.7"
   },
   "devDependencies": {
+    "babel-eslint": "^10.1.0",
     "eslint": "^8.20.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.26.0",
