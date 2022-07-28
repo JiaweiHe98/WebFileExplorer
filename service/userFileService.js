@@ -7,7 +7,13 @@ const fileUploadHelper = require('../utils/fileUploadHelper');
  * @param {string} dir - Path from the request
  * @returns - The real path in the computer's file system
  */
-const getRealDir = (dir) => path.join(__dirname, '../files', dir);
+const getRealDir = (dir) => {
+  try {
+    return path.join(__dirname, '../files', dir);
+  } catch (err) {
+    return path.join(__dirname, '../files');
+  }
+};
 
 /**
  * Service for geeting the impformation from a directory
@@ -62,17 +68,26 @@ const deleteFileOrDir = async (dir, name) => {
 };
 
 /**
- *
+ * Used to handle the file from the client
  * @param {object} file - the file object from express-fileupload
  * @param {string} dir - Path from the request
  * @param {string} name - The name of the file
  * @param {function} callback - Callback function when upload is finished
  */
 const uploadAFile = async (file, dir, name, callback) => {
-  const res = fsHelper.checkExistance(getRealDir(dir));
+  const isDirectoryExist = await fsHelper.checkExistance(getRealDir(dir));
 
-  if (!res) {
-    callback(false);
+  if (!isDirectoryExist) {
+    callback(false, `Directory "${dir}" does not exist`);
+    return;
+  }
+
+  const isFileExist = await fsHelper.checkExistance(
+    path.join(getRealDir(dir), name),
+  );
+
+  if (isFileExist) {
+    callback(false, `File "${name}" already exist`);
     return;
   }
 
@@ -83,10 +98,26 @@ const uploadAFile = async (file, dir, name, callback) => {
   );
 };
 
+/**
+ * Used to locate file that the client ask
+ * @param {string} pathToFile - Full path in the front end
+ * @param {function} callback - A function used to send file to the client or error message
+ */
+const downloadAFile = async (pathToFile, callback) => {
+  const realDir = getRealDir(pathToFile);
+  const res = await fsHelper.checkExistance(realDir);
+  if (res) {
+    callback(true, realDir);
+  } else {
+    callback(false, null);
+  }
+};
+
 module.exports = {
   getDirInfo,
   addANewFolder,
   rename,
   deleteFileOrDir,
   uploadAFile,
+  downloadAFile,
 };

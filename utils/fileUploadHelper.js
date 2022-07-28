@@ -7,9 +7,9 @@
 const acceptUpload = (file, destination, callback) => {
   file.mv(destination, (err) => {
     if (err) {
-      callback(false);
+      callback(false, 'System cannot accept the file');
     } else {
-      callback(true);
+      callback(true, 'OK');
     }
   });
 };

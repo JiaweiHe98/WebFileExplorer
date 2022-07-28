@@ -5,6 +5,7 @@ const {
   rename,
   deleteFileOrDir,
   uploadAFile,
+  downAFile,
 } = require('../controller/apiController');
 
 /**
@@ -37,5 +38,10 @@ router.get('/delete', deleteFileOrDir);
  * Upload a file
  */
 router.post('/upload', uploadAFile);
+
+/**
+ * Download a file
+ */
+router.get('/download', downAFile);
 
 module.exports = router;

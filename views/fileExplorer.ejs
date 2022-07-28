@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/fileExplorer.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="the-box">
+      <div>
+        <h2 class="index-of">
+          Index of: <a href="/view/drive?path=/">(root)</a> / <% for (var i = 0;
+          i < indexOf.length; i++) { %>
+          <a
+            href="<%= `/view/drive?path=${indexOf.slice(0, i + 1).join('/')}` %>"
+            ><%= indexOf[i] %></a
+          >
+          / <% } %>
+        </h2>
+      </div>
+      <hr />
+      <div>
+        <h2>Directories</h2>
+        <div class="container">
+          <table>
+            <tbody>
+              <tr>
+                <th class="n">Name</th>
+                <th class="m">Last Modified</th>
+              </tr>
+              <% if (currentDir.length > 1) { %>
+              <tr>
+                <td class="n">
+                  <a href="<%= `/view/drive?path=${previous}` %>">..</a
+                  ><span>/</span>
+                </td>
+                <td class="m">-</td>
+              </tr>
+              <% } %> <% for (var i = 0; i < directories.length; i++) { %>
+              <tr>
+                <td class="n">
+                  <a
+                    href="<%= `/view/drive?path=${currentDir}/${directories[i].name}` %>"
+                    onclick="addToRecent(true, '<%= directories[i].name %>', '<%= `/view/drive?path=${currentDir}${directories[i].name}` %>', '-', '<%= directories[i].mtime %>')"
+                    ><%= directories[i].name %></a
+                  ><span>/</span>
+                </td>
+                <td class="m"><%= directories[i].mtime %></td>
+              </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div>
+        <h2>Files</h2>
+        <div class="container">
+          <table>
+            <tbody>
+              <tr>
+                <th class="n">Name</th>
+                <th class="s">File Size</th>
+                <th class="m">Last Modified</th>
+              </tr>
+              <% for (var i = 0; i < files.length; i++) { %>
+              <tr>
+                <td class="n">
+                  <a
+                    href="<%= `/api/download?file=${currentDir}/${files[i].name}` %>"
+                    target="”_blank”"
+                    onclick="addToRecent(false, '<%= files[i].name %>', '<%=`/api/download?file=${currentDir}/${files[i].name}` %>', '<%= files[i].size %>', '<%= files[i].mtime %>')"
+                    ><%= files[i].name %></a
+                  >
+                </td>
+                <td class="s"><%= files[i].size %></td>
+                <td class="m"><%= files[i].mtime %></td>
+              </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div>
+        <h2>File Upload</h2>
+        <div class="container">
+          <div class="file-upload">
+            <input id="file-upload" name="upload" type="file" />
+            <button
+              class="upload-btn"
+              onclick="uploadFile('<%= currentDir %>')"
+            >
+              Upload
+            </button>
+          </div>
+
+          <div class="file-progress">
+            <label for="file-progress">File Progress: </label>
+            <progress id="file-progress" max="100" value="80"></progress>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h2>Recently Viewed</h2>
+        <div class="container">
+          <div class="f-and-d-div">
+            <span class="f-and-d-span">Files or Directories</span>
+            <label id="recent-limit-label" for="recent-limit">Limit: </label>
+            <select id="recent-limit" onchange="changeRecentLimit()">
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+              <option value="all">All</option>
+            </select>
+            <button class="f-and-d-btn" onclick="clearRecent()">Clear</button>
+          </div>
+
+          <table>
+            <tbody id="recent-tbody">
+              <tr>
+                <th class="n">Name</th>
+                <th class="s">File Size</th>
+                <th class="m">Last Viewed</th>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <script src="/fileExplorer.js"></script>
+  </body>
+</html>

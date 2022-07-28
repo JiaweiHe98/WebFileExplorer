@@ -95,15 +95,15 @@ const deleteFileOrDir = async (req, res) => {
  */
 const uploadAFile = (req, res) => {
   try {
-    const { path } = req.query;
+    const { path } = req.body;
     const { file } = req.files;
     const { name } = file;
 
-    const callback = (status) => {
+    const callback = (status, message) => {
       if (status) {
         simpleMessageResponse(res, 201, `File "${name}" successfully uploaded`);
       } else {
-        simpleMessageResponse(res, 400, `File "${name}" fail to upload`);
+        simpleMessageResponse(res, 400, message);
       }
     };
 
@@ -113,10 +113,29 @@ const uploadAFile = (req, res) => {
   }
 };
 
+const downAFile = (req, res) => {
+  try {
+    const { file } = req.query;
+
+    const callback = (status, realFilePath) => {
+      if (status) {
+        res.sendFile(realFilePath);
+      } else {
+        simpleMessageResponse(res, 404, 'File not found');
+      }
+    };
+
+    userFileService.downloadAFile(file, callback);
+  } catch (err) {
+    simpleMessageResponse(res, 404, 'File not found');
+  }
+};
+
 module.exports = {
   queryDirectory,
   addANewFolder,
   rename,
   deleteFileOrDir,
   uploadAFile,
+  downAFile,
 };
