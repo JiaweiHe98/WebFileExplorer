@@ -139,13 +139,13 @@ const createNewFolder = async (dir, name) => {
  * Try to rename a file or directory
  * @param {string} - The directory that the new folder will be located
  * @param {string} name - The name of the file
- * @param {*} newName - New name of the file
+ * @param {string} newName - New name of the file
  * @returns - Whether the name is changed and message of why it is not changed
  */
 const rename = async (dir, name, newName) => {
   const fullPathOld = path.join(dir, name);
   if (!(await checkExistance(fullPathOld))) {
-    return { renamed: false, message: 'Do not exist' };
+    return { renamed: false, message: `"${name}" does not exist` };
   }
 
   const fullPathNew = path.join(dir, newName);
@@ -164,13 +164,13 @@ const rename = async (dir, name, newName) => {
 /**
  * Delete a file or a whole directory
  * @param {string} dir - The direcotry where the file or folder is located
- * @param {*} name - The name of the file or the name of the directory
+ * @param {string} name - The name of the file or the name of the directory
  * @returns - Whether the file or dir is deleted and message of why it is not deleted
  */
 const deleteFileOrDir = async (dir, name) => {
   const fullPath = path.join(dir, name);
   if (!(await checkExistance(fullPath))) {
-    return { deleted: false, message: 'Do not exist' };
+    return { deleted: false, message: `"${name}" does not exist` };
   }
 
   const stat = await fs.promises.stat(fullPath);
